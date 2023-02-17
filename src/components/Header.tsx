@@ -42,14 +42,39 @@ function Header() {
                 <HiOutlineChatBubbleOvalLeftEllipsis className='icon' />
                 <BsBell className='icon' />
                 <AiOutlinePlus className='icon' />
+                <button
+                    className=' flex items-center mt-1 text-gray-900 font-semibold 
+                    h-10 py-2 px-4 bg-gray-300 hover:bg-gray-500 rounded-2xl'>
+                    <TfiAnnouncement 
+                        className='h-8 w-6 lg:w-12 cursor-pointer rounded-sm lg:p-1
+                      lg:hover:bg-gray-100'/>
+                    <p className='font-normal'>Advertise</p>
+                </button>
             </div>
-            <div className='ml-5 space-x-2 -mt-7 text-gray-500 flex items-center lg:hidden'>
+            <div className='ml-5 space-x-2 -mt-7  text-gray-500 flex items-center lg:hidden'>
                 <HiOutlineChatBubbleOvalLeftEllipsis className='icon' />
                 <BsBell className='icon' />
                 <AiOutlinePlus className='icon' />
             </div>
-            
-            
+            {/*sign in*/}
+            <div className='ml-2 flex'>
+                <button
+                    className='items-center mt-1 text-white w-32 font-semibold
+                    h-10 py-2 px-4 bg-blue-700 hover:bg-blue-500 rounded-2xl'>
+                    Log In
+                </button>
+            </div>
+            {/*sign out*/}
+            <div className='hidden ml-8 -mt-6 flex items-center xl:min-w-[200px]'>
+                <Image
+                    width={41}
+                    height={41}
+                    src="/img/profile_image2.png"
+                    alt="profile image"
+                />
+                <p className='text-base font-medium mt-[6px] ml-2 hidden flex-1 lg:inline'>Home</p>
+                <BiChevronDown size={25} />
+            </div>
         </div>
     )
 }
