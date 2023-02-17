@@ -7,6 +7,7 @@ import { TfiAnnouncement } from 'react-icons/tfi'
 import { RiCoinsLine } from 'react-icons/ri'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { HiHome } from 'react-icons/hi'
+import { signIn } from 'next-auth/react'
 function Header() {
     return (
         <div className='flex bg-white px-3 py-2'>
@@ -57,8 +58,8 @@ function Header() {
                 <AiOutlinePlus className='icon' />
             </div>
             {/*sign in*/}
-            <div className='ml-2 flex'>
-                <button
+            <div onClick={() =>signIn()} className='ml-2 flex'>
+                <button 
                     className='items-center mt-1 text-white w-32 font-semibold
                     h-10 py-2 px-4 bg-blue-700 hover:bg-blue-500 rounded-2xl'>
                     Log In
