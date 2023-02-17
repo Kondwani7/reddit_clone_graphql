@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import { HiOutlineChatBubbleOvalLeftEllipsis } from 'react-icons/hi2'
 import { BsArrowUpRightCircle, BsBell, BsChatLeftText } from 'react-icons/bs'
-import { BiChevronDown,BiSearch } from 'react-icons/bi'
+import { BiChevronDown, BiSearch } from 'react-icons/bi'
 import { TfiAnnouncement } from 'react-icons/tfi'
 import { RiCoinsLine } from 'react-icons/ri'
 import { AiOutlinePlus } from 'react-icons/ai'
@@ -25,14 +25,31 @@ function Header() {
             </div>
             {/*search box */}
             <form className='ml-6 h-12 flex flex-1 items-center space-x-2 rounded-full border-gray-200 bg-gray-100 px-3 py-1'>
-                <BiSearch className='text-gray-400' size={25}/>
-                <input 
+                <BiSearch className='text-gray-400' size={25} />
+                <input
                     className='flex-1 bg-transparent outline-none'
                     type="text"
                     placeholder='Search Reddit'
                 />
-                <button type='submit' hidden/>
+                <button type='submit' hidden />
             </form>
+
+            <div className='mx-5 hidden space-x-2 text-gray-500 lg:inline-flex'>
+                <BsArrowUpRightCircle className='icon' />
+                <RiCoinsLine className='icon' />
+                <BsChatLeftText className='icon' />
+                <div className="mt-1 h-8 -ml-0.5 w-[1px] bg-gray-600"></div>
+                <HiOutlineChatBubbleOvalLeftEllipsis className='icon' />
+                <BsBell className='icon' />
+                <AiOutlinePlus className='icon' />
+            </div>
+            <div className='ml-5 space-x-2 -mt-7 text-gray-500 flex items-center lg:hidden'>
+                <HiOutlineChatBubbleOvalLeftEllipsis className='icon' />
+                <BsBell className='icon' />
+                <AiOutlinePlus className='icon' />
+            </div>
+            
+            
         </div>
     )
 }
