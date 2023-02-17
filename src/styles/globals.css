@@ -5,7 +5,7 @@
 @layer components{
     .icon{
         @apply h-8 mt-2 w-6 lg:w-12 cursor-pointer rounded-sm lg:p-1
-      lg:hover:bg-gray-100 
+      lg:hover:bg-gray-100
     }
     
 }
