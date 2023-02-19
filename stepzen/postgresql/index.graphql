@@ -1,0 +1,373 @@
+type reddit_comment {
+  username: String
+  text: String
+  reddit_post: reddit_post
+    @materializer(query: "getReddit_postUsingReddit_comment_post_id_fkey")
+  post_id: ID
+  id: ID!
+  created_at: DateTime
+}
+
+type reddit_post {
+  username: String
+  title: String
+  subredditUsingReddit_post_subreddit_fkey: subreddit
+    @materializer(query: "getSubreddit")
+  subreddit: ID
+  reddit_vote: [reddit_vote] @materializer(query: "getReddit_vote")
+  reddit_comment: [reddit_comment] @materializer(query: "getReddit_comment")
+  image: String
+  id: ID!
+  created_at: DateTime
+  body: String
+}
+
+type reddit_vote {
+  username: String
+  upvote: Boolean
+  reddit_post: reddit_post @materializer(query: "getReddit_post")
+  post_id: ID
+  id: ID!
+  created_at: DateTime
+}
+
+type subreddit {
+  topic: String
+  reddit_post: [reddit_post]
+    @materializer(query: "getReddit_postUsingReddit_post_subreddit_fkey")
+  id: ID!
+  created_at: DateTime
+}
+
+"""
+The following queries are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Query {
+  " Queries for type 'reddit_comment' "
+  getReddit_comment(id: ID!): [reddit_comment]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "created_at", "id", "post_id", "text", "username" FROM "reddit_comment" WHERE "post_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  reddit_comment(id: ID!): reddit_comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_comment"
+      configuration: "postgresql_config"
+    )
+  reddit_commentList: [reddit_comment]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_comment"
+      configuration: "postgresql_config"
+    )
+  reddit_commentPaginatedList(first: Int, after: Int): [reddit_comment]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "created_at", "id", "post_id", "text", "username" FROM "reddit_comment" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'reddit_post' "
+  getReddit_post(post_id: ID!): reddit_post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "body", "created_at", "id", "image", "subreddit", "title", "username" FROM "reddit_post" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getReddit_postUsingReddit_comment_post_id_fkey(post_id: ID!): reddit_post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "body", "created_at", "id", "image", "subreddit", "title", "username" FROM "reddit_post" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getReddit_postUsingReddit_post_subreddit_fkey(id: ID!): [reddit_post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "body", "created_at", "id", "image", "subreddit", "title", "username" FROM "reddit_post" WHERE "subreddit" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  reddit_post(id: ID!): reddit_post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_post"
+      configuration: "postgresql_config"
+    )
+  reddit_postList: [reddit_post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_post"
+      configuration: "postgresql_config"
+    )
+  reddit_postPaginatedList(first: Int, after: Int): [reddit_post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "body", "created_at", "id", "image", "subreddit", "title", "username" FROM "reddit_post" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'reddit_vote' "
+  getReddit_vote(id: ID!): [reddit_vote]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "created_at", "id", "post_id", "upvote", "username" FROM "reddit_vote" WHERE "post_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  reddit_vote(id: ID!): reddit_vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_vote"
+      configuration: "postgresql_config"
+    )
+  reddit_voteList: [reddit_vote]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_vote"
+      configuration: "postgresql_config"
+    )
+  reddit_votePaginatedList(first: Int, after: Int): [reddit_vote]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "created_at", "id", "post_id", "upvote", "username" FROM "reddit_vote" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+  " Queries for type 'subreddit' "
+  getSubreddit(subreddit: ID!): subreddit
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "created_at", "id", "topic" FROM "subreddit" WHERE "id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  subreddit(id: ID!): subreddit
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subreddit"
+      configuration: "postgresql_config"
+    )
+  subredditList: [subreddit]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subreddit"
+      configuration: "postgresql_config"
+    )
+  subredditPaginatedList(first: Int, after: Int): [subreddit]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT "created_at", "id", "topic" FROM "subreddit" ORDER BY "id" LIMIT $1 OFFSET $2
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+"""
+The following mutations are just a set of examples of how to access your schema.
+Feel free to modify them or aggregate more.
+"""
+type Mutation {
+  " Mutations for type 'reddit_comment' "
+  deleteReddit_comment(id: ID!): reddit_comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_comment"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertReddit_comment(
+    username: String
+    post_id: ID
+    text: String
+    created_at: DateTime
+  ): reddit_comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_comment"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateReddit_comment(
+    id: ID!
+    created_at: DateTime
+    post_id: ID
+    text: String
+    username: String
+  ): reddit_comment
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "reddit_comment" SET
+        "created_at" = COALESCE($2, "created_at"),
+        "post_id" = COALESCE($3, "post_id"),
+        "text" = COALESCE($4, "text"),
+        "username" = COALESCE($5, "username")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'reddit_post' "
+  deleteReddit_post(id: ID!): reddit_post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_post"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertReddit_post(
+    subreddit: ID
+    body: String
+    created_at: DateTime
+    title: String
+    username: String
+    image: String
+  ): reddit_post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_post"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateReddit_post(
+    id: ID!
+    body: String
+    created_at: DateTime
+    image: String
+    subreddit: ID
+    title: String
+    username: String
+  ): reddit_post
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "reddit_post" SET
+        "body" = COALESCE($2, "body"),
+        "created_at" = COALESCE($3, "created_at"),
+        "image" = COALESCE($4, "image"),
+        "subreddit" = COALESCE($5, "subreddit"),
+        "title" = COALESCE($6, "title"),
+        "username" = COALESCE($7, "username")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'reddit_vote' "
+  deleteReddit_vote(id: ID!): reddit_vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_vote"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertReddit_vote(
+    username: String
+    post_id: ID
+    created_at: DateTime
+    upvote: Boolean
+  ): reddit_vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reddit_vote"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateReddit_vote(
+    id: ID!
+    created_at: DateTime
+    post_id: ID
+    upvote: Boolean
+    username: String
+  ): reddit_vote
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "reddit_vote" SET
+        "created_at" = COALESCE($2, "created_at"),
+        "post_id" = COALESCE($3, "post_id"),
+        "upvote" = COALESCE($4, "upvote"),
+        "username" = COALESCE($5, "username")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+  " Mutations for type 'subreddit' "
+  deleteSubreddit(id: ID!): subreddit
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subreddit"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertSubreddit(topic: String, created_at: DateTime): subreddit
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "subreddit"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  updateSubreddit(id: ID!, created_at: DateTime, topic: String): subreddit
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      UPDATE "subreddit" SET
+        "created_at" = COALESCE($2, "created_at"),
+        "topic" = COALESCE($3, "topic")
+      WHERE
+        "id" = $1
+      RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+}
