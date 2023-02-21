@@ -24,8 +24,14 @@ function PostBox() {
     formState: { errors },
   } = useForm<FormData>()
 
+  const onSubmit = handleSubmit(async (formData) => {
+    console.log(formData)
+  })
+
   return (
-    <form className='mt-6 sticky top-16 z-50 rounded-md border border-gray-300 bg-white p-2'>
+    <form
+      onSubmit={onSubmit}
+      className='mt-6 sticky top-16 z-50 rounded-md border border-gray-300 bg-white p-2'>
       <div className='flex items-center space-x-3'>
         {/*Avatar */}
         <Avatar />
@@ -39,12 +45,11 @@ function PostBox() {
           }
         />
 
-        <CiImageOn 
-          onClick={() => setImageBoxOpen(!imageBoxOpen)} 
-          size={25} 
-          className={`cursor-pointer text-gray-500 ${
-            imageBoxOpen && 'text-blue-300'
-          }`}
+        <CiImageOn
+          onClick={() => setImageBoxOpen(!imageBoxOpen)}
+          size={25}
+          className={`cursor-pointer text-gray-500 ${imageBoxOpen && 'text-blue-300'
+            }`}
         />
         <BsLink45Deg size={25} className='text-gray-500 cursor-pointer' />
       </div>
@@ -94,6 +99,15 @@ function PostBox() {
                 <p>A Subreddit is required</p>
               )}
             </div>
+          )}
+
+          {!!watch('postTitle') && (
+            <button
+              type='submit'
+              className=' w-20 rounded-full bg-blue-400 text-white'
+            >
+              Post
+            </button>
           )}
         </div>
       )}
